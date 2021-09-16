@@ -87,6 +87,17 @@ class SapperField():
                     else:
                         self.current_field[i][j] = self.open_field[i][j]
                         self.opened_cells += 1
+    
+    def _open_nonzero(self, x, y):
+        self.current_field[x][y] = self.open_field[x][y]
+        self.opened_cells += 1
+        for i in range(x - 1, x + 2):
+            for j in range(y - 1, y + 2):
+                if i == -1 or i == self.size[0] or j == -1 or j == self.size[1] or i == x and j == y:
+                    continue
+                if self.current_field[i][j] == 'x' and self.open_field[i][j] != 'b':
+                    if self.open_field[i][j] == 0:
+                        self._open_zero(i, j)
         
     def game_play(self, new_game=True):
         os.system('cls')
@@ -120,8 +131,7 @@ class SapperField():
                     if self.open_field[x][y] == 0:
                         self._open_zero(x, y)
                     else:
-                        self.current_field[x][y] = self.open_field[x][y]
-                        self.opened_cells += 1
+                        self._open_nonzero(x, y)
                 elif action == 'f':
                     if self.current_field[x][y] == 'F':
                         print("Выбрана клетка с флагом. Введите новую команду.")
@@ -199,6 +209,9 @@ class SapperGame():
 
             elif choice == 3:
                 self._save_game()
+
+            elif choice == 4:
+                pass
 
             else:
                 break
